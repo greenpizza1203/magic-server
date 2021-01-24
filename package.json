@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "ts-node .",
+    "start": "tsc --t es2019 && node dist/index.js",
     "dev": "ts-node-dev --transpile-only test.ts"
   },
   "keywords": [],
