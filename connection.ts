@@ -5,12 +5,13 @@ import WebSocket from "ws";
 
 export function connection(ws: WebSocket) {
     let fuzzy = new Fuzzy();
-    ws.on('message', (message: string) => {
-        (message.startsWith("{") || message.startsWith("[")) ? onJSON(JSON.parse(message)) : fuzzySearch(message)
-    });
+    ws.on('message', (message: string) => handleMessage(JSON.parse(message)));
 
-    async function onJSON(json) {
-        if (json['search']) {
+    async function handleMessage(json) {
+        // console.log(typeof json, json)
+        if (typeof json == "string") {
+            fuzzySearch(json)
+        } else if (json['search']) {
             let sets = await search(json['search']);
             fuzzy.addSets(sets)
             fuzzySearch(json['search'])
@@ -18,9 +19,13 @@ export function connection(ws: WebSocket) {
             sendCards(json['cards'])
         } else {
             storage.save(json)
-            fuzzy.addSets(json)
+            //todo: try 7276291
+            try {
+                fuzzy.addSets(json)
+            } catch (e) {
+                console.error(json)
+            }
             fuzzySearch()
-
         }
     }
 
@@ -33,6 +38,8 @@ export function connection(ws: WebSocket) {
 
     function fuzzySearch(target = lastRequest) {
         if (!target) return;
+        // console.trace('attempt to search', target)
+
         lastRequest = target;
         let results = fuzzy.search(target);
         if (!results) return;

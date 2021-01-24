@@ -35,10 +35,9 @@ export class Fuzzy {
         for (const setId in sets) {
             if (!this.db[setId]) {
                 for (const card of sets[setId]) this.cards[card.id] ??= card;
-                (this.db)[setId] = true;
+                this.db[setId] = true;
             }
         }
-        // console.log(Object.keys(this.cards))
         let targets = Object.values(this.cards)
         this.fuse = new Fuse<card>(targets, options)
     }

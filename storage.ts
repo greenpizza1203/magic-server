@@ -31,8 +31,9 @@ client.on("error", function (error) {
 // }
 export const storage = {
     save: (set) => {
-        const [key, value] = Object.entries(set)[0]
-        client.set(key, JSON.stringify(value))
+        Object.entries(set).forEach(([key, value]) => {
+            client.set(key, JSON.stringify(value))
+        })
     },
 
     retrieve: async (ids: string[]): Promise<any> => {
@@ -42,7 +43,6 @@ export const storage = {
             if (set) sets[id] = set;
         }
 
-        // console.log(Object.keys(sets))
         return sets
     },
 
