@@ -57,6 +57,7 @@ export function connection(ws: WebSocket) {
 
 
     function requestSet(setId) {
+        // setId=7276291;
         ws.send(JSON.stringify({setId}))
     }
 

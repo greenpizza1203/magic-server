@@ -1,7 +1,7 @@
-import serp from "./serp";
+import searchQuizlet from "./searchQuizlet";
 
 export async function getIds(query: string): Promise<string[]> {
-    const results = await serp(`site:quizlet.com ${query}`)
+    const results = await searchQuizlet(query)
     return results.map(result => getId(result.link)).filter(it => it)
 }
 
@@ -11,7 +11,6 @@ export function getId(url: string): string | undefined {
     if (!id) console.warn("unable to process quizlet url" + url)
     return id;
 }
-
 
 
 // export async function getSets(ids: string[], scrapeNew = true) {
